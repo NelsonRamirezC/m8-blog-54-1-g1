@@ -12,7 +12,7 @@ export const getAllUsuarios = async (req, res) => {
         return res.status(400).json({
             status: "error",
             message:
-                "Error interno del servidor al intentar obtener los suuarios",
+                "Error interno del servidor al intentar obtener los usuarios",
         });
     }
 };
@@ -26,12 +26,10 @@ export const getUsuarioById = async (req, res) => {
         });
 
         if (!usuario) {
-            return res
-                .status(400)
-                .json({
-                    status: "fail",
-                    message: `Usuario con id: ${id} no encontrado.`,
-                });
+            return res.status(400).json({
+                status: "fail",
+                message: `Usuario con id: ${id} no encontrado.`,
+            });
         }
 
         res.json({ status: "ok", usuario });
