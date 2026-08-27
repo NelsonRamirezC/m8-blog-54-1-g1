@@ -48,7 +48,7 @@ Usuario.init(
         timestamps: false, // Desactiva createdAt y updatedAt automáticos para coincidir con tu tabla
     },
 );
-
+//RESTRINGIR QUE EL MODELO MODIFIQUE LA ESTRUCTURA DE LAS TABLAS DE BASE DE DATOS
 Usuario.sync({force: false, alter: false});
 
 export default Usuario;
