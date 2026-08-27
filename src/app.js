@@ -1,5 +1,6 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
+import usuariosRoutes from "./routes/usuarios.routes.js";
 
 const app = express();
 
@@ -7,6 +8,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+
+//ENDPPINTS DE LA API
+app.use("/api/usuarios", usuariosRoutes);
 
 //ENDPOINTS DE REGISTRO / LOGIN
 app.use("/auth", authRoutes);
