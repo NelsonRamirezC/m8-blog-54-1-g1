@@ -17,9 +17,9 @@ export const getAllUsuarios = async (req, res) => {
     }
 };
 
-export const getUsuarioById = async () => {
+export const getUsuarioById = async (req, res) => {
     try {
-        let { id } = requestAnimationFrame;
+        let { id } = req.params;
 
         const usuario = await Usuario.findByPk(id, {
             attributes: { exclude: ["password", "status", "admin"] },
@@ -34,7 +34,7 @@ export const getUsuarioById = async () => {
                 });
         }
 
-        res.json({ status: "ok" }, usuario);
+        res.json({ status: "ok", usuario });
     } catch (error) {
         console.log(error);
         return res.status(400).json({
