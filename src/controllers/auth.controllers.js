@@ -1,5 +1,6 @@
 import Usuario from "../models/Usuario.model.js";
 import sequelize from "../config/database.js";
+import { generarHash, decodificarHash } from "../utils/hash.js";
 
 export const registro = async (req, res) => {
     const t = await sequelize.transaction();
@@ -17,22 +18,25 @@ export const registro = async (req, res) => {
 
         //CREACIÓN DE USUARIOS
 
-        const usuarioDb = await Usuario.findOne({ where: { email }, transaction: t });
+        const usuarioDb = await Usuario.findOne({
+            where: { email },
+            transaction: t,
+        });
 
         //SI EXISTE EL USUARIO EN LA BASE DE DATOS
         if (usuarioDb) {
             await t.rollback();
-            return res
-                .status(400)
-                .json({
-                    status: "fail",
-                    message: `Ya existe un usuario con el email: ${email}, intente recupera su password o debe ponerse en contacto con el administrador: soporte@admin.com`,
-                });
+            return res.status(400).json({
+                status: "fail",
+                message: `Ya existe un usuario con el email: ${email}, intente recupera su password o debe ponerse en contacto con el administrador: soporte@admin.com`,
+            });
         }
 
+        let hashPassword = generarHash(password);
+
         let usuario = await Usuario.create(
-            { nombre, email, password },
-            { transaction:t },
+            { nombre, email, password: hashPassword},
+            { transaction: t },
         );
 
         usuario = usuario.toJSON();
@@ -40,9 +44,12 @@ export const registro = async (req, res) => {
         delete usuario.status;
         delete usuario.admin;
 
-
         await t.commit();
-        res.status(201).json({ status: "success", message: "Registro ok", usuario });
+        res.status(201).json({
+            status: "success",
+            message: "Registro ok",
+            usuario,
+        });
     } catch (error) {
         console.log(error);
         await t.rollback();
@@ -54,8 +61,31 @@ export const registro = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+
     try {
-        res.json({ status: "success", message: "Login" });
+        let { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                status: "fail",
+                message:
+                    "No se proporcion los campos requeridos: [email, password]",
+            });
+        }
+
+        const usuario = await Usuario.findOne({where: { email}});
+
+        let validPassword = decodificarHash(password, usuario.password)
+
+        if (!usuario || !validPassword) {
+            return res.status(400).json({
+                status: "fail",
+                message: `Credenciales inválidas.`,
+            });
+        }
+
+
+        res.json({ status: "success", message: "Login Ok!" });
     } catch (error) {
         res.status(500).json({
             status: "error",
