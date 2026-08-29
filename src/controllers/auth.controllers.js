@@ -32,10 +32,8 @@ export const registro = async (req, res) => {
             });
         }
 
-        let hashPassword = generarHash(password);
-
         let usuario = await Usuario.create(
-            { nombre, email, password: hashPassword},
+            { nombre, email, password },
             { transaction: t },
         );
 

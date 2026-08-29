@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import { generarHash } from "../utils/hash.js";
 
 class Usuario extends Model {}
 
@@ -25,6 +26,9 @@ Usuario.init(
         password: {
             type: DataTypes.STRING(255),
             allowNull: false,
+            set(value) {
+                this.setDataValue("password", generarHash(value));
+            },
         },
         fecha_creacion: {
             type: DataTypes.DATE,
@@ -49,6 +53,6 @@ Usuario.init(
     },
 );
 //RESTRINGIR QUE EL MODELO MODIFIQUE LA ESTRUCTURA DE LAS TABLAS DE BASE DE DATOS
-Usuario.sync({force: false, alter: false});
+Usuario.sync({ force: false, alter: false });
 
 export default Usuario;

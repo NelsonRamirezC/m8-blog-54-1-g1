@@ -11,4 +11,7 @@ router.get("/", usuariosControllers.getAllUsuarios);
 //OBTENER USUARIOS POR ID
 router.get("/:id", usuariosControllers.getUsuarioById);
 
+//ACTUALIZAR USUARIOS POR ID
+router.put("/:id", validateBody, usuariosControllers.updateUsuario);
+
 export default router;
