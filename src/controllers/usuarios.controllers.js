@@ -10,7 +10,7 @@ export const getAllUsuarios = async (req, res) => {
         res.json({ status: "Ok", usuarios });
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(500).json({
             status: "error",
             message:
                 "Error interno del servidor al intentar obtener los usuarios",
@@ -27,7 +27,7 @@ export const getUsuarioById = async (req, res) => {
         });
 
         if (!usuario) {
-            return res.status(400).json({
+            return res.status(404).json({
                 status: "fail",
                 message: `Usuario con id: ${id} no encontrado.`,
             });
@@ -36,10 +36,10 @@ export const getUsuarioById = async (req, res) => {
         res.json({ status: "ok", usuario });
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(500).json({
             status: "error",
             message:
-                "Error interno del servidor al intentar obtener los suuarios",
+                "Error interno del servidor al intentar obtener el usuario por id.",
         });
     }
 };
@@ -66,7 +66,7 @@ export const updateUsuario = async (req, res) => {
 
         if (!usuario) {
             await t.rollback();
-            return res.status(400).json({
+            return res.status(404).json({
                 status: "fail",
                 message: `Usuario con id: ${id} no encontrado.`,
             });
@@ -83,15 +83,49 @@ export const updateUsuario = async (req, res) => {
         delete usuario.password;
 
         await t.commit();
-        res.json({ status: "ok", message: "Usuario actualizado con éxito", usuario });
+        res.status(201).json({ status: "ok", message: "Usuario actualizado con éxito", usuario });
     } catch (error) {
         await t.rollback();
         console.log(error);
-        return res.status(400).json({
+        return res.status(500).json({
             status: "error",
             message:
-                "Error interno del servidor al intentar obtener los suuarios",
+                "Error interno del servidor al intentar actualizar el usuario.",
         });
     }
 };
+
+export const deleteUsuarioById = async (req, res) => {
+    const t = await sequelize.transaction();
+    try {
+        let { id } = req.params;
+
+        const usuario = await Usuario.findByPk(id, {
+            attributes: { exclude: ["password", "status", "admin"] },
+            transaction: t
+        });
+
+        if (!usuario) {
+            await t.rollback();
+            return res.status(404).json({
+                status: "fail",
+                message: `Usuario con id: ${id} no encontrado.`,
+            });
+        }
+
+        await usuario.destroy({ transaction: t});
+
+        await t.commit();
+        res.json({ status: "ok", message: `Usuario ${usuario.nombre} eliminado con éxito.`});
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        return res.status(500).json({
+            status: "error",
+            message:
+                "Error interno del servidor al intentar eliminar al usuario",
+        });
+    }
+};
+
 

@@ -14,4 +14,7 @@ router.get("/:id", usuariosControllers.getUsuarioById);
 //ACTUALIZAR USUARIOS POR ID
 router.put("/:id", validateBody, usuariosControllers.updateUsuario);
 
+//ELIMINAR USUARIOS POR ID
+router.delete("/:id", usuariosControllers.deleteUsuarioById);
+
 export default router;
