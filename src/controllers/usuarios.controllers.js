@@ -3,13 +3,39 @@ import sequelize from "../config/database.js";
 
 export const getAllUsuarios = async (req, res) => {
     try {
-        const usuarios = await Usuario.findAll({
+        const { offset, limit, sortBy, orderType } = req.query;
+
+        // 1. Sanitizar paginación con valores por defecto y límites mínimos
+        const parsedOffset = Math.max(0, parseInt(offset, 10) || 0);
+        const parsedLimit = Math.max(1, parseInt(limit, 10) || 10);
+
+        // 2. Validar y construir ordenamiento seguro (lista blanca contra inyección SQL)
+        const allowedSortFields = ["id", "nombre", "email"];
+        let order;
+
+        if (sortBy && allowedSortFields.includes(sortBy)) {
+            const direction =
+                orderType?.trim().toUpperCase() === "DESC" ? "DESC" : "ASC";
+            order = [[sortBy, direction]];
+        }
+
+        // 3. Consulta a la base de datos
+        const { count, rows } = await Usuario.findAndCountAll({
             attributes: { exclude: ["password", "status", "admin"] },
+            offset: parsedOffset,
+            limit: parsedLimit,
+            order,
         });
 
-        res.json({ status: "Ok", usuarios });
+        return res.json({
+            status: "Ok",
+            data: {
+                cantidad: count,
+                usuarios: rows,
+            },
+        });
     } catch (error) {
-        console.log(error);
+        console.error("Error en getAllUsuarios:", error);
         return res.status(500).json({
             status: "error",
             message:
@@ -61,7 +87,7 @@ export const updateUsuario = async (req, res) => {
 
         let usuario = await Usuario.findByPk(id, {
             attributes: ["id", "nombre", "email"],
-            transaction: t
+            transaction: t,
         });
 
         if (!usuario) {
@@ -73,17 +99,21 @@ export const updateUsuario = async (req, res) => {
         }
 
         await usuario.update(
-            { nombre, email, password }, 
-            { 
+            { nombre, email, password },
+            {
                 transaction: t,
-            }
+            },
         );
 
         usuario = usuario.toJSON();
         delete usuario.password;
 
         await t.commit();
-        res.status(201).json({ status: "ok", message: "Usuario actualizado con éxito", usuario });
+        res.status(201).json({
+            status: "ok",
+            message: "Usuario actualizado con éxito",
+            usuario,
+        });
     } catch (error) {
         await t.rollback();
         console.log(error);
@@ -102,7 +132,7 @@ export const deleteUsuarioById = async (req, res) => {
 
         const usuario = await Usuario.findByPk(id, {
             attributes: { exclude: ["password", "status", "admin"] },
-            transaction: t
+            transaction: t,
         });
 
         if (!usuario) {
@@ -113,10 +143,13 @@ export const deleteUsuarioById = async (req, res) => {
             });
         }
 
-        await usuario.destroy({ transaction: t});
+        await usuario.destroy({ transaction: t });
 
         await t.commit();
-        res.json({ status: "ok", message: `Usuario ${usuario.nombre} eliminado con éxito.`});
+        res.json({
+            status: "ok",
+            message: `Usuario ${usuario.nombre} eliminado con éxito.`,
+        });
     } catch (error) {
         await t.rollback();
         console.log(error);
@@ -127,5 +160,3 @@ export const deleteUsuarioById = async (req, res) => {
         });
     }
 };
-
-
