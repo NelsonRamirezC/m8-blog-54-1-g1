@@ -9,7 +9,7 @@ export const crearComentario = async (req, res) => {
     try {
         const { contenido, publicacionId, usuarioId } = req.body;
 
-        if (!contenido || !publicacionId || usuarioId) {
+        if (!contenido || !publicacionId || !usuarioId) {
             await t.rollback();
             return res.status(400).json({
                 status: "fail",
