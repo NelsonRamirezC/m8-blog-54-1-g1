@@ -47,7 +47,7 @@ Publicacion.init(
         timestamps: true,
         createdAt: "fechaCreacion",
         updatedAt: "fechaActualizacion",
-        underscored
+        underscored: true
     },
 );
 
