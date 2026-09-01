@@ -30,9 +30,10 @@ Usuario.init(
                 this.setDataValue("password", generarHash(value));
             },
         },
-        fecha_creacion: {
+        fechaCreacion: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
+            field: "fecha_creacion"
         },
         admin: {
             type: DataTypes.BOOLEAN,
@@ -50,6 +51,7 @@ Usuario.init(
         modelName: "usuario",
         tableName: "usuarios",
         timestamps: false, // Desactiva createdAt y updatedAt automáticos para coincidir con tu tabla
+        underscored:true
     },
 );
 //RESTRINGIR QUE EL MODELO MODIFIQUE LA ESTRUCTURA DE LAS TABLAS DE BASE DE DATOS

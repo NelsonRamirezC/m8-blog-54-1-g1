@@ -11,9 +11,10 @@ Publicacion.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        usuario_id: {
+        usuarioId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            field: "usuario_id",
             references: {
                 model: Usuario,
                 key: "id",
@@ -28,14 +29,25 @@ Publicacion.init(
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        fechaCreacion: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+            field: "fecha_creacion"
+        },
+        fechaActualizacion: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+            field: "fecha_actualizacion"
+        }
     },
     {
         sequelize,
         modelName: "publicacion",
         tableName: "publicaciones",
         timestamps: true,
-        createdAt: "fecha_creacion",
-        updatedAt: "fecha_actualizacion",
+        createdAt: "fechaCreacion",
+        updatedAt: "fechaActualizacion",
+        underscored
     },
 );
 

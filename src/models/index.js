@@ -1,32 +1,35 @@
 import Usuario from "./Usuario.model.js";
 import Comentario from "./Comentario.model.js";
-import Publicacion from "./publicacion.model.js";
+import Publicacion from "./Publicacion.model.js";
 
 
 //RELACIONES DE ERD
 
 //UNO A MUCHOS ENTRE USUARIO Y PUBLICACIÓN
 Usuario.hasMany(Publicacion, {
-    foreignKey: "usuario_id"
+    foreignKey: "usuarioId",
+    onDelete: "CASCADE"
 });
 Publicacion.belongsTo(Usuario, {
-    foreignKey: "usuario_id"
+    foreignKey: "usuarioId"
 });
 
 //UNO A MUCHOS ENTRE USUARIO Y COMENTARIO
 Usuario.hasMany(Comentario, {
-    foreignKey: "usuario_id"
+    foreignKey: "usuarioId",
+    onDelete: "CASCADE"
 });
 Comentario.belongsTo(Usuario, {
-    foreignKey: "usuario_id"
+    foreignKey: "usuarioId"
 });
 
 //UNO A MUCHOS ENTRE PUBLICACION Y COMENTARIO
 Publicacion.hasMany(Comentario, {
-    foreignKey: "publicacion_id"
+    foreignKey: "publicacionId",
+    onDelete: "CASCADE"
 });
 Comentario.belongsTo(Publicacion, {
-    foreignKey: "publicacion_id"
+    foreignKey: "publicacionId"
 });
 
 
