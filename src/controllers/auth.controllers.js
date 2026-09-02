@@ -16,6 +16,32 @@ export const registro = async (req, res) => {
             });
         }
 
+        //procesar imágen si es que existe
+        let imagenAvatar = null;
+        let mimetype = null;
+
+        if(req.files && req.files.avatar){
+
+            const file = req.files.avatar;
+
+            const formatosPermitidos = ["image/jpg", "image/jpeg", "image/webp"];
+
+            if(!formatosPermitidos.includes(file.mimetype)){
+                await t.rollback();
+                return res.status(400).json({status: "fail", message: "Formato de imagen no permitido, sólo se permiten imágenes de los siguientes formatos: [jpg, jpeg, webp]."});
+            };
+
+            const maxSize = 3 * 1024 * 1024; // 3 MBs
+
+            if(file.size > maxSize){
+                await t.rollback();
+                return res.status(400).json({status: "fail", message: "La imagen sobrepasa el límite de 3 Mbs permitidos."});
+            }
+
+            imagenAvatar = file.data;
+            mimetype = file.mimetype;
+        }
+
         //CREACIÓN DE USUARIOS
 
         const usuarioDb = await Usuario.findOne({
@@ -33,7 +59,7 @@ export const registro = async (req, res) => {
         }
 
         let usuario = await Usuario.create(
-            { nombre, email, password },
+            { nombre, email, password, imagenAvatar, mimetype },
             { transaction: t },
         );
 
@@ -41,6 +67,8 @@ export const registro = async (req, res) => {
         delete usuario.password;
         delete usuario.status;
         delete usuario.admin;
+        delete usuario.imagenAvatar;
+        delete usuario.mimetype;
 
         await t.commit();
         res.status(201).json({

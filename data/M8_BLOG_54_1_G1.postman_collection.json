@@ -1,0 +1,337 @@
+{
+  "info": {
+    "_postman_id": "15c29310-659b-4de7-a2e0-e5f3e5d85876",
+    "name": "M8_BLOG_54_1_G1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12060319"
+  },
+  "item": [
+    {
+      "name": "AUTH",
+      "item": [
+        {
+          "name": "LOGIN USUARIO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "REGISTRO USUARIO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "nombre",
+                  "value": "Pedro",
+                  "type": "text",
+                  "uuid": "4f409f8d-6bb2-4985-a0b3-4125c326af09"
+                },
+                {
+                  "key": "email",
+                  "value": "pedro@gmail.com",
+                  "type": "text",
+                  "uuid": "9149099f-4f84-434d-b200-45fe9587c78c"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text",
+                  "uuid": "da822ceb-0d07-483a-802b-71e4e54ef045"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:3000/auth/registro",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "auth",
+                "registro"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "USUARIOS",
+      "item": [
+        {
+          "name": "GET ALL USUARIOS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/usuarios",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET USUARIO BY ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/usuarios/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "usuarios",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE USUARIO",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "nombre",
+                  "value": "Martita",
+                  "type": "text",
+                  "uuid": "4f409f8d-6bb2-4985-a0b3-4125c326af09"
+                },
+                {
+                  "key": "email",
+                  "value": "marta@gmail.com",
+                  "type": "text",
+                  "uuid": "9149099f-4f84-434d-b200-45fe9587c78c"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text",
+                  "uuid": "da822ceb-0d07-483a-802b-71e4e54ef045"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:3000/api/usuarios/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "usuarios",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE USUARIO BY ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/usuarios/4",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "usuarios",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET AVATAR USUARIO",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/usuarios/6/avatar",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "usuarios",
+                "6",
+                "avatar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PUBLICACIONES",
+      "item": [
+        {
+          "name": "GET ALL PUBLICACIONES",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/publicaciones",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "publicaciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET PUBLICACIONES BY ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:3000/api/publicaciones/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "publicaciones",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CREATE PUBLICACION",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "usuarioId",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "c5a755c5-8d43-4103-90c2-ea017950d376"
+                },
+                {
+                  "key": "titulo",
+                  "value": "Pubicación 1",
+                  "type": "text",
+                  "uuid": "047292f8-6559-466f-8c61-9ed9772efe74"
+                },
+                {
+                  "key": "contenido",
+                  "value": "Contenido de publicación 1",
+                  "type": "text",
+                  "uuid": "f167abe4-99f7-4cdc-b75f-63542d4054bf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:3000/api/publicaciones",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "publicaciones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "COMENTARIOS",
+      "item": [
+        {
+          "name": "CREATE COMENTARIOS",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "usuarioId",
+                  "value": "2",
+                  "type": "text",
+                  "uuid": "c5a755c5-8d43-4103-90c2-ea017950d376"
+                },
+                {
+                  "key": "publicacionId",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "f167abe4-99f7-4cdc-b75f-63542d4054bf"
+                },
+                {
+                  "key": "contenido",
+                  "value": "Me gustó la publicación",
+                  "type": "text",
+                  "uuid": "57b2bd66-645c-4c5e-bcd3-eb3e522fd7c5"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:3000/api/comentarios",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "comentarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

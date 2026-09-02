@@ -17,4 +17,7 @@ router.put("/:id", validateBody, usuariosControllers.updateUsuario);
 //ELIMINAR USUARIOS POR ID
 router.delete("/:id", usuariosControllers.deleteUsuarioById);
 
+//RUTA QUE PERMITE OBTENER LA IMAGEN DE AVATAR DE CADA USUARIO
+router.get("/:id/avatar", usuariosControllers.getAvatarById);
+
 export default router;

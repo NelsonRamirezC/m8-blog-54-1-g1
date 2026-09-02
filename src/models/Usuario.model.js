@@ -45,6 +45,15 @@ Usuario.init(
             allowNull: false,
             defaultValue: true,
         },
+        imagenAvatar: {
+            type: DataTypes.BLOB,
+            allowNull: true,
+            field: "imagen_avatar"
+        },
+        mimetype: {
+            type: DataTypes.STRING(50),
+            allowNull: true,
+        }
     },
     {
         sequelize,

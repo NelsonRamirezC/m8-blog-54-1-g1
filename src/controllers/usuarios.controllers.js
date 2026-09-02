@@ -21,17 +21,24 @@ export const getAllUsuarios = async (req, res) => {
 
         // 3. Consulta a la base de datos
         const { count, rows } = await Usuario.findAndCountAll({
-            attributes: { exclude: ["password", "status", "admin"] },
+            attributes: { exclude: ["password", "status", "admin", "imagenAvatar", "mimetype"] },
             offset: parsedOffset,
             limit: parsedLimit,
             order,
         });
 
+
+        const usuarios = rows.map(u => {
+            u = u.toJSON();
+            u.urlImagen = `/api/usuarios/${u.id}/avatar`;
+            return u;
+        })
+
         return res.json({
             status: "Ok",
             data: {
                 cantidad: count,
-                usuarios: rows,
+                usuarios
             },
         });
     } catch (error) {
@@ -49,7 +56,7 @@ export const getUsuarioById = async (req, res) => {
         let { id } = req.params;
 
         const usuario = await Usuario.findByPk(id, {
-            attributes: { exclude: ["password", "status", "admin"] },
+            attributes: { exclude: ["password", "status", "admin", "imagenAvatar", "mimetype"] },
         });
 
         if (!usuario) {
@@ -131,7 +138,7 @@ export const deleteUsuarioById = async (req, res) => {
         let { id } = req.params;
 
         const usuario = await Usuario.findByPk(id, {
-            attributes: { exclude: ["password", "status", "admin"] },
+            attributes: ["id", "nombre", "email"],
             transaction: t,
         });
 
@@ -160,3 +167,45 @@ export const deleteUsuarioById = async (req, res) => {
         });
     }
 };
+
+
+export const getAvatarById = async (req, res) => {
+    try {
+        
+        let { id } = req.params;
+
+        const usuario = await Usuario.findByPk(id, {
+            attributes: ["imagenAvatar", "mimetype"]
+        });
+
+        if (!usuario) {
+            return res.status(404).json({
+                status: "fail",
+                message: `Usuario con id: ${id} no encontrado.`,
+            });
+        }
+
+        //DEVOLVER LA IMAGEN SI ES QUE EXISTE
+
+        if(!usuario.imagenAvatar || !usuario.mimetype){
+            return res.status(404).json({
+                status: "Not found",
+                message: "El usuario no tiene avatar asignado"
+            })
+        }
+
+        //CONFIGURAR LOS HEADERS PARA LA RESPUESTA
+        res.set("Content-Type", usuario.mimetype);
+        res.set("Cache-Control", "public, nax-age=3600");
+        res.send(usuario.imagenAvatar);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            status: "error",
+            message:
+                "Error interno del servidor al intentar obtener el avatar del usuario",
+        });
+    }
+
+}
