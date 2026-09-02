@@ -14,6 +14,9 @@ app.use(express.urlencoded({extended:true}));
 //GUARDA LOS FILES EN REQ.FILES
 app.use(fileUpload());
 
+//MIDDLEWASRE PARA CARPETA PUBLIC
+app.use(express.static("public"));
+
 
 //ENDPPINTS DE LA API
 app.use("/api/usuarios", usuariosRoutes);
