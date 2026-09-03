@@ -13,7 +13,7 @@ router.get("/", usuariosControllers.getAllUsuarios);
 router.get("/:id", usuariosControllers.getUsuarioById);
 
 //ACTUALIZAR USUARIOS POR ID
-router.put("/:id", validateBody, usuariosControllers.updateUsuario);
+router.put("/:id", validateBody, verifyToken, usuariosControllers.updateUsuario);
 
 //ELIMINAR USUARIOS POR ID
 router.delete("/:id", verifyToken, usuariosControllers.deleteUsuarioById);

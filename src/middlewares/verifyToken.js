@@ -5,7 +5,7 @@ const verifyToken = async (req, res, next) => {
     try {
         if (!req.headers || !req.headers.authorization) {
             return res
-                .status(400)
+                .status(401)
                 .json({ status: "fail", message: "No se proporcionar token." });
         }
 

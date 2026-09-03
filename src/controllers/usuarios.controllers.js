@@ -96,45 +96,43 @@ export const updateUsuario = async (req, res) => {
     const t = await sequelize.transaction();
     try {
         let { id } = req.params;
+
+        if (!req.usuario.admin) {
+            if (id != req.usuario.id) {
+                await t.rollback();
+                return res.status(403).json({
+                    status: "fail",
+                    message:
+                        "Usted no tiene permisos para realizar esta operación.",
+                });
+            }
+        }
+
         let { nombre, email, password } = req.body;
 
-        if (!nombre || !email || !password || isNaN(id)) {
+        if (!nombre || !email || !password) {
             await t.rollback();
             return res.status(400).json({
                 status: "fail",
                 message:
-                    "No se proporcion los campos requeridos o tienen formatos inválidos: [id, nombre, email, password]",
+                    "No se proporcion los campos requeridos o tienen formatos inválidos: [nombre, email, password]",
             });
         }
 
-        let usuario = await Usuario.findByPk(id, {
-            attributes: ["id", "nombre", "email"],
-            transaction: t,
-        });
-
-        if (!usuario) {
-            await t.rollback();
-            return res.status(404).json({
-                status: "fail",
-                message: `Usuario con id: ${id} no encontrado.`,
-            });
-        }
-
-        await usuario.update(
+        await Usuario.update(
             { nombre, email, password },
             {
+                where: { id: req.usuario.id},
                 transaction: t,
             },
         );
 
-        usuario = usuario.toJSON();
-        delete usuario.password;
 
         await t.commit();
         res.status(201).json({
             status: "ok",
             message: "Usuario actualizado con éxito",
-            usuario,
+
         });
     } catch (error) {
         await t.rollback();
