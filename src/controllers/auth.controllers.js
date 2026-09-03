@@ -1,6 +1,7 @@
 import Usuario from "../models/Usuario.model.js";
 import sequelize from "../config/database.js";
 import { generarHash, decodificarHash } from "../utils/hash.js";
+import jwt from "jsonwebtoken";
 
 export const registro = async (req, res) => {
     const t = await sequelize.transaction();
@@ -110,8 +111,17 @@ export const login = async (req, res) => {
             });
         }
 
+        const payload = {
+            id: usuario.id,
+            nombre: usuario.nombre,
+            admin: usuario.admin,
+            status: usuario.status
+        }
 
-        res.json({ status: "success", message: "Login Ok!" });
+        const token = jwt.sign(payload, 'secret', { expiresIn: '3m' });
+
+        res.json({ status: "success", message: "Login Ok!", token });
+
     } catch (error) {
         res.status(500).json({
             status: "error",

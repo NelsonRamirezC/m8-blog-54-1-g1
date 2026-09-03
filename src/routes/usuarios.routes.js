@@ -1,7 +1,8 @@
 import express from "express";
 import * as usuariosControllers from "../controllers/usuarios.controllers.js";
-
 import validateBody from "../middlewares/validateBody.js";
+import verifyToken from "../middlewares/verifyToken.js";
+
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get("/:id", usuariosControllers.getUsuarioById);
 router.put("/:id", validateBody, usuariosControllers.updateUsuario);
 
 //ELIMINAR USUARIOS POR ID
-router.delete("/:id", usuariosControllers.deleteUsuarioById);
+router.delete("/:id", verifyToken, usuariosControllers.deleteUsuarioById);
 
 //RUTA QUE PERMITE OBTENER LA IMAGEN DE AVATAR DE CADA USUARIO
 router.get("/:id/avatar", usuariosControllers.getAvatarById);

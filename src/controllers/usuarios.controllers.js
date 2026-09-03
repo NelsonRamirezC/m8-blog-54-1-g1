@@ -21,24 +21,31 @@ export const getAllUsuarios = async (req, res) => {
 
         // 3. Consulta a la base de datos
         const { count, rows } = await Usuario.findAndCountAll({
-            attributes: { exclude: ["password", "status", "admin", "imagenAvatar", "mimetype"] },
+            attributes: {
+                exclude: [
+                    "password",
+                    "status",
+                    "admin",
+                    "imagenAvatar",
+                    "mimetype",
+                ],
+            },
             offset: parsedOffset,
             limit: parsedLimit,
             order,
         });
 
-
-        const usuarios = rows.map(u => {
+        const usuarios = rows.map((u) => {
             u = u.toJSON();
             u.urlImagen = `/api/usuarios/${u.id}/avatar`;
             return u;
-        })
+        });
 
         return res.json({
             status: "Ok",
             data: {
                 cantidad: count,
-                usuarios
+                usuarios,
             },
         });
     } catch (error) {
@@ -56,7 +63,15 @@ export const getUsuarioById = async (req, res) => {
         let { id } = req.params;
 
         const usuario = await Usuario.findByPk(id, {
-            attributes: { exclude: ["password", "status", "admin", "imagenAvatar", "mimetype"] },
+            attributes: {
+                exclude: [
+                    "password",
+                    "status",
+                    "admin",
+                    "imagenAvatar",
+                    "mimetype",
+                ],
+            },
         });
 
         if (!usuario) {
@@ -137,25 +152,28 @@ export const deleteUsuarioById = async (req, res) => {
     try {
         let { id } = req.params;
 
-        const usuario = await Usuario.findByPk(id, {
-            attributes: ["id", "nombre", "email"],
-            transaction: t,
-        });
+        let userToken = req.usuario;
 
-        if (!usuario) {
-            await t.rollback();
-            return res.status(404).json({
-                status: "fail",
-                message: `Usuario con id: ${id} no encontrado.`,
-            });
+        if (!userToken.admin) {
+            if (id != userToken.id) {
+                await t.rollback();
+                return res.status(403).json({
+                    status: "fail",
+                    message:
+                        "Usted no tiene permisos para realizar esta operación.",
+                });
+            }
         }
 
-        await usuario.destroy({ transaction: t });
+        await Usuario.destroy({
+            where: { id },
+            transaction: t,
+        });
 
         await t.commit();
         res.json({
             status: "ok",
-            message: `Usuario ${usuario.nombre} eliminado con éxito.`,
+            message: `Usuario ${userToken.nombre} eliminado con éxito.`,
         });
     } catch (error) {
         await t.rollback();
@@ -168,14 +186,12 @@ export const deleteUsuarioById = async (req, res) => {
     }
 };
 
-
 export const getAvatarById = async (req, res) => {
     try {
-        
         let { id } = req.params;
 
         const usuario = await Usuario.findByPk(id, {
-            attributes: ["imagenAvatar", "mimetype"]
+            attributes: ["imagenAvatar", "mimetype"],
         });
 
         if (!usuario) {
@@ -185,20 +201,19 @@ export const getAvatarById = async (req, res) => {
             });
         }
 
-        //DEVOLVER LA IMAGEN SI ES QUE EXISTE
+        // DEVOLVER LA IMAGEN SI ES QUE EXISTE
 
-        if(!usuario.imagenAvatar || !usuario.mimetype){
+        if (!usuario.imagenAvatar || !usuario.mimetype) {
             return res.status(404).json({
                 status: "Not found",
-                message: "El usuario no tiene avatar asignado"
-            })
+                message: "El usuario no tiene avatar asignado",
+            });
         }
 
         //CONFIGURAR LOS HEADERS PARA LA RESPUESTA
         res.set("Content-Type", usuario.mimetype);
         res.set("Cache-Control", "public, nax-age=3600");
         res.send(usuario.imagenAvatar);
-
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -207,5 +222,4 @@ export const getAvatarById = async (req, res) => {
                 "Error interno del servidor al intentar obtener el avatar del usuario",
         });
     }
-
-}
+};
