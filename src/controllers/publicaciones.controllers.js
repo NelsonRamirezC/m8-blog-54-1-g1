@@ -141,7 +141,8 @@ export const actualizarPublicacion = async (req, res) => {
                 await t.rollback();
                 return res.status(403).json({
                     status: "fail",
-                    message: "Usted no tiene permisos para editar esta publicación.",
+                    message:
+                        "Usted no tiene permisos para editar esta publicación.",
                 });
             }
         }
@@ -179,6 +180,15 @@ export const eliminarPublicacion = async (req, res) => {
             return res.status(404).json({
                 status: "fail",
                 message: "La publicación no existe",
+            });
+        }
+
+        if (!req.usuario.admin && req.usuario.id != publicacion.usuarioId) {
+            await t.rollback();
+            return res.status(403).json({
+                status: "fail",
+                message:
+                    "Usted no tiene permisos para eliminar esta publicación.",
             });
         }
 

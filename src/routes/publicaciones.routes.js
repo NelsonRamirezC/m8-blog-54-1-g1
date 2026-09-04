@@ -6,7 +6,12 @@ import verifyToken from "../middlewares/verifyToken.js";
 const router = express.Router();
 
 // CREAR UNA NUEVA PUBLICACIÓN
-router.post("/", validateBody, verifyToken, publicacionesControllers.crearPublicacion);
+router.post(
+    "/",
+    validateBody,
+    verifyToken,
+    publicacionesControllers.crearPublicacion,
+);
 
 // OBTENER TODAS LAS PUBLICACIONES
 router.get("/", publicacionesControllers.obtenerPublicaciones);
@@ -23,6 +28,10 @@ router.put(
 );
 
 // ELIMINAR UNA PUBLICACIÓN
-router.delete("/:id", publicacionesControllers.eliminarPublicacion);
+router.delete(
+    "/:id",
+    verifyToken,
+    publicacionesControllers.eliminarPublicacion,
+);
 
 export default router;
