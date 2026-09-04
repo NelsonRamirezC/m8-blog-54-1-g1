@@ -24,6 +24,6 @@ router.get("/:id", comentariosControllers.obtenerComentarioPorId);
 router.put("/:id", validateBody, comentariosControllers.actualizarComentario);
 
 // ELIMINAR UN COMENTARIO
-router.delete("/:id", comentariosControllers.eliminarComentario);
+router.delete("/:id", verifyToken, comentariosControllers.eliminarComentario);
 
 export default router;

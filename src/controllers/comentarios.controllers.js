@@ -9,7 +9,7 @@ export const crearComentario = async (req, res) => {
     try {
         const { contenido, publicacionId } = req.body;
 
-        if (!contenido || !publicacionId ) {
+        if (!contenido || !publicacionId) {
             await t.rollback();
             return res.status(400).json({
                 status: "fail",
@@ -204,7 +204,15 @@ export const eliminarComentario = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const comentario = await Comentario.findByPk(id, { transaction: t });
+        const comentario = await Comentario.findByPk(id, {
+            include: [
+                {
+                    model: Publicacion,
+                },
+            ],
+            transaction: t,
+        });
+
         if (!comentario) {
             await t.rollback();
             return res.status(404).json({
@@ -213,13 +221,28 @@ export const eliminarComentario = async (req, res) => {
             });
         }
 
-        await comentario.destroy({ transaction: t });
-        await t.commit();
+        console.log(comentario.toJSON());
+        if (
+            req.usuario.admin ||
+            req.usuario.id == comentario.usuarioId ||
+            req.usuario.id == comentario.publicacion.usuarioId
+        ) {
+            await comentario.destroy({ transaction: t });
+            await t.commit();
 
-        res.json({
-            status: "success",
-            message: "Comentario eliminado exitosamente",
-        });
+            return res.json({
+                status: "success",
+                message: "Comentario eliminado exitosamente",
+            });
+        } else {
+            return res
+                .status(403)
+                .json({
+                    status: "fail",
+                    message:
+                        "Usted no tiene permisos para eliminar el comentario.",
+                });
+        }
     } catch (error) {
         console.log(error);
         await t.rollback();
