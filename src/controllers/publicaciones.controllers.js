@@ -9,7 +9,7 @@ export const crearPublicacion = async (req, res) => {
     try {
         const { titulo, contenido } = req.body;
 
-        if (!titulo || !contenido ) {
+        if (!titulo || !contenido) {
             await t.rollback();
             return res.status(400).json({
                 status: "fail",
@@ -80,16 +80,20 @@ export const obtenerPublicacionPorId = async (req, res) => {
                     attributes: ["id", "nombre", "email"],
                 },
                 {
-                    model:Comentario,
-                    attributes: ["id", "usuarioId", "contenido", "fechaCreacion"],
+                    model: Comentario,
+                    attributes: [
+                        "id",
+                        "usuarioId",
+                        "contenido",
+                        "fechaCreacion",
+                    ],
                     include: [
                         {
                             model: Usuario,
                             attributes: ["id", "nombre", "email"],
-                        }
-                    ]
-
-                }
+                        },
+                    ],
+                },
             ],
         });
 
@@ -128,6 +132,18 @@ export const actualizarPublicacion = async (req, res) => {
                 status: "fail",
                 message: "La publicación no existe",
             });
+        }
+
+        //VERIFICAR SI USARIO AUTENTICADO ES EL AUTOR DE LA PUBLICACIÓN O ES ADMIN
+
+        if (!req.usuario.admin) {
+            if (req.usuario.id != publicacion.usuarioId) {
+                await t.rollback();
+                return res.status(403).json({
+                    status: "fail",
+                    message: "Usted no tiene permisos para editar esta publicación.",
+                });
+            }
         }
 
         if (titulo) publicacion.titulo = titulo;

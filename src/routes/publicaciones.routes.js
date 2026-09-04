@@ -18,6 +18,7 @@ router.get("/:id", publicacionesControllers.obtenerPublicacionPorId);
 router.put(
     "/:id",
     validateBody,
+    verifyToken,
     publicacionesControllers.actualizarPublicacion,
 );
 
