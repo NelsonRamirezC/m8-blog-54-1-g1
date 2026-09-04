@@ -14,6 +14,23 @@
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "marta_godoy@gmail.com",
+                  "type": "text",
+                  "uuid": "7531170d-1812-43e1-b122-f47fde62be1c"
+                },
+                {
+                  "key": "password",
+                  "value": "qwerty",
+                  "type": "text",
+                  "uuid": "bb14c70c-9c4f-4d6c-9848-089b9ab5422b"
+                }
+              ]
+            },
             "url": {
               "raw": "localhost:3000/auth/login",
               "host": [
@@ -117,6 +134,16 @@
         {
           "name": "UPDATE USUARIO",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywibm9tYnJlIjoiQ2FybGl0b3MiLCJhZG1pbiI6ZmFsc2UsInN0YXR1cyI6dHJ1ZSwiaWF0IjoxNzg4NDc5MjExLCJleHAiOjE3ODg0NzkzOTF9.Vdl4lU6bWNp0lBHha_72KJbyH9pLWRmzUz_dPic-EL4",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [],
             "body": {
@@ -124,13 +151,13 @@
               "urlencoded": [
                 {
                   "key": "nombre",
-                  "value": "Martita",
+                  "value": "Carlos Meza",
                   "type": "text",
                   "uuid": "4f409f8d-6bb2-4985-a0b3-4125c326af09"
                 },
                 {
                   "key": "email",
-                  "value": "marta@gmail.com",
+                  "value": "carlos.meza@gmail.com",
                   "type": "text",
                   "uuid": "9149099f-4f84-434d-b200-45fe9587c78c"
                 },
@@ -143,7 +170,7 @@
               ]
             },
             "url": {
-              "raw": "localhost:3000/api/usuarios/1",
+              "raw": "localhost:3000/api/usuarios/7",
               "host": [
                 "localhost"
               ],
@@ -151,7 +178,7 @@
               "path": [
                 "api",
                 "usuarios",
-                "1"
+                "7"
               ]
             }
           },
@@ -160,10 +187,20 @@
         {
           "name": "DELETE USUARIO BY ID",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Niwibm9tYnJlIjoiSnVhbml0byIsImFkbWluIjpmYWxzZSwic3RhdHVzIjp0cnVlLCJpYXQiOjE3ODg0Nzg2MjAsImV4cCI6MTc4ODQ3ODgwMH0.s5U4hDBvESzU-_5IfupybMT97cmeCVT_xTsb0wTEwQI",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:3000/api/usuarios/4",
+              "raw": "localhost:3000/api/usuarios/6",
               "host": [
                 "localhost"
               ],
@@ -171,7 +208,7 @@
               "path": [
                 "api",
                 "usuarios",
-                "4"
+                "6"
               ]
             }
           },
@@ -245,17 +282,21 @@
         {
           "name": "CREATE PUBLICACION",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywibm9tYnJlIjoiQ2FybG9zIE1lemEiLCJhZG1pbiI6ZmFsc2UsInN0YXR1cyI6dHJ1ZSwiaWF0IjoxNzg4NDgyMTYxLCJleHAiOjE3ODg0ODIzNDF9.IX68EjMKo0CsTMJH69dx27Tn5UN2tumb8-raLvOQQBY",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "urlencoded",
               "urlencoded": [
-                {
-                  "key": "usuarioId",
-                  "value": "1",
-                  "type": "text",
-                  "uuid": "c5a755c5-8d43-4103-90c2-ea017950d376"
-                },
                 {
                   "key": "titulo",
                   "value": "Pubicación 1",
@@ -283,6 +324,53 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "UPDATE PUBLICACION BY ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywibm9tYnJlIjoiQ2FybG9zIE1lemEiLCJhZG1pbiI6ZmFsc2UsInN0YXR1cyI6dHJ1ZSwiaWF0IjoxNzg4NDgyNjI1LCJleHAiOjE3ODg0ODI4MDV9.N6XgHhZHDTemh1wTFizejhrwjXdMmg_3pytygCBiplA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "titulo",
+                  "value": "Actualizando titulo",
+                  "type": "text",
+                  "uuid": "047292f8-6559-466f-8c61-9ed9772efe74"
+                },
+                {
+                  "key": "contenido",
+                  "value": "Actualizando contenido titulo",
+                  "type": "text",
+                  "uuid": "f167abe4-99f7-4cdc-b75f-63542d4054bf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:3000/api/publicaciones/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "publicaciones",
+                "2"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -292,17 +380,21 @@
         {
           "name": "CREATE COMENTARIOS",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywibm9tYnJlIjoiQ2FybG9zIE1lemEiLCJhZG1pbiI6ZmFsc2UsInN0YXR1cyI6dHJ1ZSwiaWF0IjoxNzg4NDgyOTQ5LCJleHAiOjE3ODg0ODMxMjl9.wftIYkuIHFLTvOMPOrvyZ3nnXvconpxGgV3ZYTYadlM",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "urlencoded",
               "urlencoded": [
-                {
-                  "key": "usuarioId",
-                  "value": "2",
-                  "type": "text",
-                  "uuid": "c5a755c5-8d43-4103-90c2-ea017950d376"
-                },
                 {
                   "key": "publicacionId",
                   "value": "1",
@@ -326,6 +418,40 @@
               "path": [
                 "api",
                 "comentarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE COMENTARIO BY ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tYnJlIjoiTWFydGEgR29kb3kiLCJhZG1pbiI6ZmFsc2UsInN0YXR1cyI6dHJ1ZSwiaWF0IjoxNzg4NDg0MDA3LCJleHAiOjE3ODg0ODQxODd9.1mLZBVcMPCEB2Gbihz_p7Ym86iZmzcerBTJXnxbn_Q0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "localhost:3000/api/comentarios/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "comentarios",
+                "1"
               ]
             }
           },

@@ -125,7 +125,7 @@ export const login = async (req, res) => {
             status: usuario.status
         }
 
-        const token = jwt.sign(payload, 'secret', { expiresIn: '3m' });
+        const token = jwt.sign(payload, process.env.SECRETO_JWT, { expiresIn: '3m' });
 
         res.json({ status: "success", message: "Login Ok!", token });
 
