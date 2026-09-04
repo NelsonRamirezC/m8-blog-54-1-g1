@@ -7,26 +7,18 @@ import sequelize from "../config/database.js";
 export const crearPublicacion = async (req, res) => {
     const t = await sequelize.transaction();
     try {
-        const { titulo, contenido, usuarioId } = req.body;
+        const { titulo, contenido } = req.body;
 
-        if (!titulo || !contenido || !usuarioId) {
+        if (!titulo || !contenido ) {
             await t.rollback();
             return res.status(400).json({
                 status: "fail",
                 message:
-                    "No se proporcionaron los campos requeridos: [titulo, contenido, usuarioId]",
+                    "No se proporcionaron los campos requeridos: [titulo, contenido ]",
             });
         }
 
-        // Verificar que el usuario existe
-        const usuario = await Usuario.findByPk(usuarioId, { transaction: t });
-        if (!usuario) {
-            await t.rollback();
-            return res.status(404).json({
-                status: "fail",
-                message: "El usuario no existe",
-            });
-        }
+        const usuarioId = req.usuario.id;
 
         const publicacion = await Publicacion.create(
             { titulo, contenido, usuarioId },

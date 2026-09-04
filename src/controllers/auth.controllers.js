@@ -100,11 +100,18 @@ export const login = async (req, res) => {
             });
         }
 
-        const usuario = await Usuario.findOne({where: { email}});
+        const usuario = await Usuario.findOne({where: { email }});
+
+        if (!usuario) {
+            return res.status(400).json({
+                status: "fail",
+                message: `Credenciales inválidas.`,
+            });
+        }
 
         let validPassword = decodificarHash(password, usuario.password)
 
-        if (!usuario || !validPassword) {
+        if (!validPassword) {
             return res.status(400).json({
                 status: "fail",
                 message: `Credenciales inválidas.`,
@@ -123,6 +130,7 @@ export const login = async (req, res) => {
         res.json({ status: "success", message: "Login Ok!", token });
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             status: "error",
             message: "Error interno del servidor.",
