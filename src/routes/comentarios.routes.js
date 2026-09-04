@@ -1,11 +1,12 @@
 import express from "express";
 import * as comentariosControllers from "../controllers/comentarios.controllers.js";
 import validateBody from "../middlewares/validateBody.js";
+import verifyToken from "../middlewares/verifyToken.js";
 
 const router = express.Router();
 
 // CREAR UN NUEVO COMENTARIO
-router.post("/", validateBody, comentariosControllers.crearComentario);
+router.post("/", validateBody, verifyToken, comentariosControllers.crearComentario);
 
 // OBTENER TODOS LOS COMENTARIOS
 router.get("/", comentariosControllers.obtenerComentarios);
